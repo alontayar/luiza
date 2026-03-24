@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎉 Happy 18th Birthday!</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <script src="https://open.spotify.com/iframe-api/v1" async></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --win-silver: #c0c0c0;
+      --win-dark: #808080;
+      --win-white: #ffffff;
+      --win-black: #000000;
+      --win-blue: #000080;
+      --win-blue2: #1084d0;
+      --wa-bg: #1c1c1c;
+      --wa-dark: #141414;
+      --wa-panel: #232323;
+      --wa-green: #00e000;
+      --wa-glow: #00ff00;
+      --wa-dim: #006600;
+    }
+
+    body {
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      background: #008080;
+      font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+      font-size: 11px;
+      cursor: default;
+      user-select: none;
+      background-image:
+        radial-gradient(circle at 30% 20%, rgba(0,100,100,0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0,60,60,0.2) 0%, transparent 40%);
+    }
+
+    /* ═══════════════════════════════════════════
+       WIN95 UTILITIES
+    ═══════════════════════════════════════════ */
+    .raised {
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-dark) var(--win-dark) var(--win-white);
+    }
+    .sunken {
+      border: 2px solid;
+      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+    }
+    .win-btn {
+      background: var(--win-silver);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-dark) var(--win-dark) var(--win-white);
+      padding: 3px 14px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      min-width: 75px;
+    }
+    .win-btn:active {
+      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+      padding: 4px 13px 2px 15px;
+    }
+    .win-input {
+      border: 2px solid;
+      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+      background: white; padding: 2px 4px;
+      font-family: inherit; font-size: 11px;
+      width: 100%;
+    }
+
+    /* ═══════════════════════════════════════════
+       DESKTOP
+    ═══════════════════════════════════════════ */
+    #desktop {
+      width: 100%; height: calc(100% - 30px);
+      position: relative;
+    }
+    .d-icon {
+      position: absolute; width: 72px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 4px; padding: 6px 4px; cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .d-icon:hover { background: rgba(0,0,128,0.4); border-color: rgba(255,255,255,0.5); }
+    .d-icon .ico { font-size: 32px; line-height: 1; filter: drop-shadow(1px 1px 2px #000); }
+    .d-icon span {
+      color: white; font-size: 11px; text-align: center;
+      text-shadow: 1px 1px 2px #000, -1px -1px 2px #000;
+    }
+
+    /* ═══════════════════════════════════════════
+       TASKBAR
+    ═══════════════════════════════════════════ */
+    #taskbar {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 30px;
+      background: var(--win-silver);
+      border-top: 2px solid var(--win-white);
+      display: flex; align-items: center; padding: 2px 4px; gap: 4px;
+      z-index: 1000;
+    }
+    #start-btn {
+      background: var(--win-silver);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-dark) var(--win-dark) var(--win-white);
+      padding: 2px 8px; font-weight: bold; font-size: 11px;
+      display: flex; align-items: center; gap: 4px; cursor: pointer;
+      white-space: nowrap; height: 22px;
+    }
+    .tb-btn {
+      height: 22px; background: var(--win-silver);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-dark) var(--win-dark) var(--win-white);
+      padding: 0 8px; font-size: 11px; cursor: pointer;
+      max-width: 150px; overflow: hidden; text-overflow: ellipsis;
+      white-space: nowrap; display: flex; align-items: center; gap: 4px;
+    }
+    .tb-btn:active { border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark); }
+    #tb-sep { width: 2px; height: 20px; background: var(--win-dark); box-shadow: 1px 0 0 var(--win-white); margin: 0 2px; }
+    #clock {
+      margin-left: auto;
+      background: var(--win-silver);
+      border: 2px solid;
+      border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark);
+      padding: 2px 8px; font-size: 11px; white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════════
+       WIN95 WINDOW
+    ═══════════════════════════════════════════ */
+    .win95 {
+      position: absolute;
+      background: var(--win-silver);
+      border: 2px solid;
+      border-color: var(--win-white) var(--win-dark) var(--win-dark) var(--win-white);
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    }
+    .win-title {
+      background: linear-gradient(to right, var(--win-blue), var(--win-blue2));
+      color: white; padding: 3px 4px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: move; font-weight: bold; font-size: 11px;
+    }
+    .win-title-left { display: flex; align-items: center; gap: 4px; overflow: hidden; flex: 1; min-width: 0; }
+    .win-title-left span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .win-title-btns { display: flex; gap: 2px; flex-shrink: 0; }
+    .win-tbtn {
+      width: 16px; height: 14px; background: var(--win-silver);
+      border: 1px solid; border-color: var(--win-white) var(--win-dark) var(--win-dark) var(--win-white);
+      font-size: 8px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: black; font-weight: bold; line-height: 1;
+    }
+    .win-tbtn:active { border-color: var(--win-dark) var(--win-white) var(--win-white) var(--win-dark); }
+
+    /* ═══════════════════════════════════════════
+       WINAMP MAIN WINDOW
+    ═══════════════════════════════════════════ */
+    #winamp { width: 280px; top: 60px; left: 80px; z-index: 100; }
+    #winamp .win-title { background: linear-gradient(to right, #1a1a1a, #333); }
+
+    #wa-body { background: var(--wa-bg); padding: 5px; display: flex; flex-direction: column; gap: 4px; }
+
+    /* LED Display */
+    #wa-display {
+      background: #000; height: 62px; padding: 5px 7px; position: relative;
+      border: 2px solid; border-color: #3a3a3a #888 #888 #3a3a3a;
+      overflow: hidden;
+    }
+    #wa-display::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px);
+      pointer-events: none;
+    }
+    #wa-time {
+      font-family: 'VT323', monospace; font-size: 32px; color: var(--wa-green);
+      text-shadow: 0 0 8px var(--wa-glow), 0 0 16px rgba(0,255,0,0.3);
+      letter-spacing: 3px; line-height: 1;
+    }
+    #wa-track {
+      font-family: 'VT323', monospace; font-size: 15px; color: var(--wa-green);
+      text-shadow: 0 0 5px var(--wa-glow);
+      white-space: nowrap; overflow: hidden;
+      max-width: 180px; text-overflow: ellipsis;
+    }
+    #wa-status {
+      position: absolute; top: 5px; right: 7px;
+      font-family: 'VT323', monospace; font-size: 12px; color: var(--wa-dim);
+      text-shadow: 0 0 4px #00440044;
+    }
+    #wa-bitrate {
+      position: absolute; bottom: 5px; right: 7px;
+      font-family: 'VT323', monospace; font-size: 10px; color: #004400;
+    }
+
+    /* Progress */
+    #wa-progress {
+      height: 7px; background: #000; cursor: pointer; position: relative;
+      border: 1px solid #333;
+    }
+    #wa-prog-fill { height: 100%; width: 0%; background: var(--wa-green); box-shadow: 0 0 4px var(--wa-glow); transition: width 0.25s linear; }
+    #wa-prog-handle {
+      position: absolute; top: -2px; width: 4px; height: 11px;
+      background: var(--wa-green); box-shadow: 0 0 6px var(--wa-glow);
+      transform: translateX(-50%); left: 0%; transition: left 0.25s linear;
+    }
+
+    /* Spectrum */
+    #wa-spectrum { width: 100%; height: 36px; background: #000; border: 1px solid #222; display: block; }
+
+    /* Volume + Balance row */
+    #wa-sliders { display: flex; gap: 6px; align-items: center; }
+    .wa-slider-group { display: flex; align-items: center; gap: 3px; flex: 1; }
+    .wa-slider-label { font-family: 'VT323', monospace; font-size: 12px; color: var(--wa-dim); width: 24px; text-align: right; }
+    .wa-slider { flex: 1; height: 7px; background: #000; border: 1px solid #333; cursor: pointer; position: relative; }
+    .wa-slider-fill { height: 100%; background: var(--wa-green); box-shadow: 0 0 3px var(--wa-glow); }
+
+    /* Controls */
+    #wa-controls { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+    .wa-btn {
+      background: var(--wa-panel);
+      border: 1px solid #3a3a3a; color: #888;
+      padding: 5px 2px; cursor: pointer; text-align: center;
+      font-family: 'Tahoma', sans-serif;
+      display: flex; flex-direction: column; align-items: center; gap: 1px;
+      transition: all 0.05s;
+    }
+    .wa-btn:hover { background: #2e2e2e; color: #ccc; border-color: #555; }
+    .wa-btn:active { background: #111; transform: scale(0.97); }
+    .wa-btn.lit { color: var(--wa-glow); text-shadow: 0 0 6px var(--wa-glow); border-color: #005500; }
+    .wa-btn .bi { font-size: 16px; line-height: 1; }
+    .wa-btn .bl { font-size: 7px; color: #444; letter-spacing: 0.5px; }
+    .wa-btn.lit .bl { color: var(--wa-dim); }
+
+    /* Bottom toggles */
+    #wa-bottom { display: flex; justify-content: space-between; align-items: center; padding: 0 2px; }
+    .wa-tog {
+      font-family: 'VT323', monospace; font-size: 12px; color: #444;
+      padding: 1px 5px; cursor: pointer; border: 1px solid #333; background: #111;
+      letter-spacing: 1px; transition: all 0.1s;
+    }
+    .wa-tog:hover { color: #888; border-color: #555; }
+    .wa-tog.on { color: var(--wa-glow); border-color: #004400; text-shadow: 0 0 5px var(--wa-glow); }
+    #wa-version { font-family: 'VT323', monospace; font-size: 11px; color: #333; }
+
+    /* ═══════════════════════════════════════════
+       PLAYLIST WINDOW
+    ═══════════════════════════════════════════ */
+    #playlist { width: 280px; top: 410px; left: 80px; z-index: 99; }
+    #playlist .win-title { background: linear-gradient(to right, #1a1a1a, #333); }
+
+    #pl-body {
+      background: #000; height: 210px; overflow-y: auto;
+      border: 2px solid; border-color: #3a3a3a #888 #888 #3a3a3a;
+    }
+    #pl-body::-webkit-scrollbar { width: 11px; }
+    #pl-body::-webkit-scrollbar-track { background: #0a0a0a; border-left: 1px solid #222; }
+    #pl-body::-webkit-scrollbar-thumb { background: #2a2a2a; border: 1px solid #3a3a3a; }
+
+    .pl-item {
+      display: flex; align-items: center; padding: 3px 7px; gap: 6px; cursor: pointer;
+      border-bottom: 1px solid #050505;
+    }
+    .pl-item:hover { background: #111; }
+    .pl-item.cur { background: #001400; }
+    .pl-num { font-family: 'VT323', monospace; font-size: 13px; color: #005500; min-width: 22px; text-align: right; flex-shrink: 0; }
+    .pl-name { font-family: 'VT323', monospace; font-size: 14px; color: #00bb00; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pl-dur { font-family: 'VT323', monospace; font-size: 12px; color: #003a00; flex-shrink: 0; }
+    .pl-item.cur .pl-name { color: var(--wa-glow); text-shadow: 0 0 5px var(--wa-glow); }
+    .pl-item.cur .pl-num { color: var(--wa-dim); }
+    .pl-item.cur .pl-dur { color: var(--wa-dim); }
+
+    #pl-footer { background: #0a0a0a; padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #1a1a1a; }
+    #pl-info { font-family: 'VT323', monospace; font-size: 12px; color: #004400; }
+    #pl-connect { background: #1a1a1a; border: 1px solid #3a3a3a; color: #888; font-size: 9px; padding: 3px 8px; cursor: pointer; font-family: 'Tahoma', sans-serif; }
+    #pl-connect:hover { color: var(--wa-glow); border-color: #005500; }
+
+    /* ═══════════════════════════════════════════
+       ALBUM ART WINDOW
+    ═══════════════════════════════════════════ */
+    #albumart { width: 310px; top: 60px; left: 410px; z-index: 98; }
+
+    #aa-body {
+      background: #000; padding: 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      border: 2px solid; border-color: #3a3a3a #888 #888 #3a3a3a;
+    }
+    #aa-art {
+      width: 286px; height: 286px; object-fit: cover;
+      border: 2px solid; border-color: #3a3a3a #888 #888 #3a3a3a;
+      background: #111;
+      display: block;
+      transition: opacity 0.3s;
+    }
+    #aa-info { width: 100%; font-family: 'VT323', monospace; text-align: center; line-height: 1.3; }
+    #aa-title { font-size: 20px; color: var(--wa-glow); text-shadow: 0 0 8px var(--wa-glow); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #aa-artist { font-size: 16px; color: #00bb00; }
+    #aa-album { font-size: 14px; color: var(--wa-dim); margin-top: 1px; }
+
+    /* ═══════════════════════════════════════════
+       BIRTHDAY DIALOG
+    ═══════════════════════════════════════════ */
+    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 9000; }
+    #bday-dlg { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9001; width: 400px; }
+    #bday-body { padding: 16px 20px; text-align: center; background: var(--win-silver); }
+    .bday-emoji { font-size: 44px; display: block; margin: 4px 0 10px; }
+    .bday-heb { font-size: 20px; font-weight: bold; direction: rtl; margin-bottom: 8px; color: #000080; }
+    .bday-eng { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 12px; }
+    .bday-msg { font-size: 12px; direction: rtl; line-height: 1.8; color: #222; margin-bottom: 10px; }
+    #bday-footer { padding: 8px 12px; display: flex; justify-content: center; border-top: 1px solid var(--win-dark); background: var(--win-silver); }
+
+    /* ═══════════════════════════════════════════
+       SETUP DIALOG
+    ═══════════════════════════════════════════ */
+    #setup-dlg { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9002; width: 380px; display: none; }
+    #setup-body { padding: 14px 16px; background: var(--win-silver); }
+    .setup-row { margin-bottom: 10px; }
+    .setup-row label { display: block; margin-bottom: 3px; font-weight: bold; }
+    .setup-note { font-size: 10px; color: #555; margin-top: 4px; direction: rtl; line-height: 1.5; }
+    #setup-footer { padding: 8px 12px; display: flex; justify-content: flex-end; gap: 6px; border-top: 1px solid var(--win-dark); background: var(--win-silver); }
+    .setup-icon { font-size: 28px; float: right; margin: 0 0 8px 10px; }
+
+    /* Spotify embed container */
+    #sp-embed { position: fixed; bottom: 32px; right: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+
+    /* Empty playlist message */
+    .pl-empty { padding: 12px 10px; text-align: center; }
+    .pl-empty p { font-family: 'VT323', monospace; font-size: 14px; color: var(--wa-dim); direction: rtl; line-height: 1.8; }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .blink { animation: blink 1s infinite; }
+  </style>
+</head>
+<body>
+
+<!-- ── Desktop ── -->
+<div id="desktop">
+  <div class="d-icon" style="top:16px;left:16px" ondblclick="showWin('winamp')">
+    <div class="ico">🎵</div><span>WinAmp.exe</span>
+  </div>
+  <div class="d-icon" style="top:96px;left:16px" ondblclick="showWin('albumart')">
+    <div class="ico">💿</div><span>Now Playing</span>
+  </div>
+  <div class="d-icon" style="top:176px;left:16px" ondblclick="showWin('playlist')">
+    <div class="ico">📋</div><span>Playlist</span>
+  </div>
+</div>
+
+<!-- ── Taskbar ── -->
+<div id="taskbar">
+  <div id="start-btn">⊞&nbsp; Start</div>
+  <div id="tb-sep"></div>
+  <div class="tb-btn" onclick="showWin('winamp')">🎵 WinAmp 2.95</div>
+  <div class="tb-btn" onclick="showWin('albumart')">💿 Now Playing</div>
+  <div class="tb-btn" onclick="showWin('playlist')">📋 Playlist</div>
+  <div id="clock"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     WINAMP MAIN WINDOW
+═══════════════════════════════════════════ -->
+<div class="win95" id="winamp">
+  <div class="win-title" id="wa-handle" onmousedown="drag(event,'winamp')">
+    <div class="win-title-left"><span>🎵</span><span>WinAmp 2.95</span></div>
+    <div class="win-title-btns">
+      <div class="win-tbtn" onclick="hideWin('winamp')">_</div>
+      <div class="win-tbtn" style="font-size:7px">□</div>
+      <div class="win-tbtn" onclick="hideWin('winamp')">✕</div>
+    </div>
+  </div>
+  <div id="wa-body">
+    <div id="wa-display">
+      <div id="wa-time">0:00</div>
+      <div id="wa-track" class="blink">[ Connect Spotify to load... ]</div>
+      <div id="wa-status">■ STOP</div>
+      <div id="wa-bitrate">320 kbps</div>
+    </div>
+
+    <div id="wa-progress" onclick="seekClick(event)">
+      <div id="wa-prog-fill"></div>
+      <div id="wa-prog-handle"></div>
+    </div>
+
+    <canvas id="wa-spectrum" height="36"></canvas>
+
+    <div id="wa-sliders">
+      <div class="wa-slider-group">
+        <div class="wa-slider-label">VOL</div>
+        <div class="wa-slider" id="vol-sl" onclick="volClick(event)">
+          <div class="wa-slider-fill" id="vol-fill" style="width:80%"></div>
+        </div>
+      </div>
+      <div class="wa-slider-group">
+        <div class="wa-slider-label">BAL</div>
+        <div class="wa-slider" id="bal-sl">
+          <div class="wa-slider-fill" style="width:50%; margin-left:25%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wa-controls">
+      <div class="wa-btn" onclick="prevTrack()"><div class="bi">⏮</div><div class="bl">PREV</div></div>
+      <div class="wa-btn" id="btn-play" onclick="togglePlay()"><div class="bi">▶</div><div class="bl">PLAY</div></div>
+      <div class="wa-btn" onclick="stopTrack()"><div class="bi">■</div><div class="bl">STOP</div></div>
+      <div class="wa-btn" onclick="nextTrack()"><div class="bi">⏭</div><div class="bl">NEXT</div></div>
+      <div class="wa-btn" onclick="openSetup()"><div class="bi">⏏</div><div class="bl">CONNECT</div></div>
+    </div>
+
+    <div id="wa-bottom">
+      <div class="wa-tog" id="tog-shuf" onclick="toggleShuffle()">SHUFFLE</div>
+      <div class="wa-tog" id="tog-rep" onclick="toggleRepeat()">REPEAT</div>
+      <div id="wa-version">WA 2.95</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PLAYLIST WINDOW
+═══════════════════════════════════════════ -->
+<div class="win95" id="playlist">
+  <div class="win-title" onmousedown="drag(event,'playlist')">
+    <div class="win-title-left"><span>📋</span><span>Playlist — <span id="pl-count">0 tracks</span></span></div>
+    <div class="win-title-btns">
+      <div class="win-tbtn" onclick="hideWin('playlist')">_</div>
+      <div class="win-tbtn" onclick="hideWin('playlist')">✕</div>
+    </div>
+  </div>
+  <div id="pl-body">
+    <div class="pl-empty">
+      <p>הפלייליסט ריק.<br>לחץ על ⏏ CONNECT<br>כדי לחבר את ספוטיפיי</p>
+    </div>
+  </div>
+  <div id="pl-footer">
+    <div id="pl-info">0 / 0 · 0:00</div>
+    <div id="pl-connect" onclick="openSetup()">🔗 Connect Spotify</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ALBUM ART WINDOW
+═══════════════════════════════════════════ -->
+<div class="win95" id="albumart">
+  <div class="win-title" onmousedown="drag(event,'albumart')">
+    <div class="win-title-left"><span>💿</span><span id="aa-win-title">Now Playing</span></div>
+    <div class="win-title-btns">
+      <div class="win-tbtn" onclick="hideWin('albumart')">_</div>
+      <div class="win-tbtn" onclick="hideWin('albumart')">✕</div>
+    </div>
+  </div>
+  <div id="aa-body">
+    <img id="aa-art" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='286' height='286'%3E%3Crect width='286' height='286' fill='%231a1a1a'/%3E%3Ctext x='143' y='160' text-anchor='middle' fill='%23003300' font-size='80'%3E🎵%3C/text%3E%3C/svg%3E" alt="Album Art">
+    <div id="aa-info">
+      <div id="aa-title">— No Track —</div>
+      <div id="aa-artist">Connect Spotify to begin</div>
+      <div id="aa-album">&nbsp;</div>
+    </div>
+  </div>
+</div>
+
+<!-- Spotify embed -->
+<div id="sp-embed"></div>
+
+<!-- ══════════════════════════════════════════
+     BIRTHDAY DIALOG
+═══════════════════════════════════════════ -->
+<div id="overlay"></div>
+<div class="win95" id="bday-dlg">
+  <div class="win-title" style="cursor:default">
+    <div class="win-title-left"><span>🎂</span><span>Happy Birthday!</span></div>
+  </div>
+  <div id="bday-body">
+    <span class="bday-emoji">🎉🎂🎉</span>
+    <div class="bday-heb">!יום הולדת שמח, בן 18</div>
+    <div class="bday-eng">Happy 18th Birthday!</div>
+    <div class="bday-msg">
+      זה לא סתם אתר —<br>
+      זה כל השירים שאספת, כל מה שהקשבת לו,<br>
+      ארוז בכיף ובאהבה, בסגנון ה-90s.<br>
+      <br>
+      לחץ OK, ואחר כך חבר את ספוטיפיי<br>
+      כדי להתחיל להשמיע 🎵
+    </div>
+  </div>
+  <div id="bday-footer">
+    <button class="win-btn" onclick="closeBday()">OK &nbsp;🎵</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SETUP DIALOG
+═══════════════════════════════════════════ -->
+<div class="win95" id="setup-dlg">
+  <div class="win-title" style="cursor:default">
+    <div class="win-title-left"><span>🔑</span><span>Connect Spotify</span></div>
+    <div class="win-title-btns">
+      <div class="win-tbtn" onclick="closeSetup()">✕</div>
+    </div>
+  </div>
+  <div id="setup-body">
+    <div class="setup-icon">🎵</div>
+    <div class="setup-row">
+      <label for="cid-input">Spotify Client ID:</label>
+      <input class="win-input" id="cid-input" type="text" placeholder="הדבק Client ID כאן...">
+      <div class="setup-note">
+        1. לך ל: <strong>developer.spotify.com</strong> → Create App<br>
+        2. תחת Redirect URIs הוסף: <strong id="redirect-uri-hint"></strong><br>
+        3. העתק את ה-Client ID ל-כאן<br>
+        4. לחץ "Connect" — תועבר לדף ההתחברות של Spotify
+      </div>
+    </div>
+  </div>
+  <div id="setup-footer">
+    <button class="win-btn" onclick="closeSetup()">Cancel</button>
+    <button class="win-btn" onclick="doConnect()" style="font-weight:bold">Connect ▶</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+// ─────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────
+const PLAYLIST_ID   = '79N5pwR8RnHYESU0fUyTrF';
+const SPOTIFY_CID   = 'eef6b14c0caa45b6807536018a53a4dd';
+const REDIRECT_URI  = 'https://alontayar.github.io/luiza/';
+
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let tracks    = [];
+let idx       = 0;
+let playing   = false;
+let shuffle   = false;
+let repeat    = false;
+let volume    = 0.8;
+let pos       = 0;   // seconds
+let dur       = 1;   // seconds
+let token     = null;
+let spCtrl    = null;
+
+// ─────────────────────────────────────────
+// CLOCK
+// ─────────────────────────────────────────
+function tickClock() {
+  const d = new Date();
+  document.getElementById('clock').textContent =
+    d.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+}
+setInterval(tickClock, 1000); tickClock();
+
+// ─────────────────────────────────────────
+// WINDOW MANAGEMENT
+// ─────────────────────────────────────────
+let dragEl = null, dragDx = 0, dragDy = 0;
+
+function drag(e, id) {
+  dragEl = document.getElementById(id);
+  dragDx = e.clientX - dragEl.offsetLeft;
+  dragDy = e.clientY - dragEl.offsetTop;
+  dragEl.style.zIndex = 300;
+  e.preventDefault();
+}
+document.addEventListener('mousemove', e => {
+  if (!dragEl) return;
+  dragEl.style.left = (e.clientX - dragDx) + 'px';
+  dragEl.style.top  = (e.clientY - dragDy) + 'px';
+});
+document.addEventListener('mouseup', () => { dragEl = null; });
+
+function showWin(id) {
+  const el = document.getElementById(id);
+  el.style.display = '';
+  el.style.zIndex = 200;
+}
+function hideWin(id) { document.getElementById(id).style.display = 'none'; }
+
+// ─────────────────────────────────────────
+// BIRTHDAY DIALOG
+// ─────────────────────────────────────────
+function closeBday() {
+  hideWin('bday-dlg');
+  document.getElementById('overlay').style.display = 'none';
+  if (!localStorage.getItem('sp_tok')) setTimeout(openSetup, 400);
+}
+
+// ─────────────────────────────────────────
+// SETUP / CONNECT (hardcoded, no dialog)
+// ─────────────────────────────────────────
+function openSetup() { startPKCE(); }
+function closeSetup() {}
+function doConnect() { startPKCE(); }
+
+// ─────────────────────────────────────────
+// SPOTIFY AUTH (PKCE)
+// ─────────────────────────────────────────
+function rndStr(len) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from(crypto.getRandomValues(new Uint8Array(len)))
+    .map(n => chars[n % chars.length]).join('');
+}
+async function pkceChallenge(verifier) {
+  const data   = new TextEncoder().encode(verifier);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+async function startPKCE() {
+  const verifier   = rndStr(128);
+  const challenge  = await pkceChallenge(verifier);
+  sessionStorage.setItem('pkce_v', verifier);
+  const params = new URLSearchParams({
+    client_id: SPOTIFY_CID,
+    response_type: 'code',
+    redirect_uri: REDIRECT_URI,
+    code_challenge_method: 'S256',
+    code_challenge: challenge,
+    scope: 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state',
+  });
+  window.location = 'https://accounts.spotify.com/authorize?' + params;
+}
+
+async function handleCallback() {
+  const sp = new URLSearchParams(window.location.search);
+  const code = sp.get('code');
+  if (!code) return false;
+
+  const verifier = sessionStorage.getItem('pkce_v');
+
+  const res = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: SPOTIFY_CID,
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: REDIRECT_URI,
+      code_verifier: verifier,
+    })
+  });
+  const data = await res.json();
+  if (data.access_token) {
+    token = data.access_token;
+    localStorage.setItem('sp_tok', token);
+    localStorage.setItem('sp_tok_exp', Date.now() + data.expires_in * 1000);
+    if (data.refresh_token) localStorage.setItem('sp_rtok', data.refresh_token);
+    window.history.replaceState({}, '', window.location.pathname);
+    return true;
+  }
+  return false;
+}
+
+// ─────────────────────────────────────────
+// LOAD PLAYLIST
+// ─────────────────────────────────────────
+async function loadPlaylist() {
+  if (!token) return;
+  let all = [], url = `https://api.spotify.com/v1/playlists/${PLAYLIST_ID}/tracks?limit=50&fields=next,items(track(id,name,duration_ms,artists(name),album(name,images)))`;
+  try {
+    while (url) {
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` }});
+      if (res.status === 401) { token = null; return; }
+      const data = await res.json();
+      all = all.concat((data.items || []).filter(i => i.track && i.track.id).map(i => i.track));
+      url = data.next;
+    }
+    tracks = all;
+    renderPlaylist();
+    if (tracks.length) {
+      loadTrack(0, false);
+      document.getElementById('wa-track').classList.remove('blink');
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ─────────────────────────────────────────
+// PLAYLIST RENDER
+// ─────────────────────────────────────────
+function fmt(ms) {
+  const s = Math.floor(ms / 1000);
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+function fmtS(s) {
+  s = Math.floor(s);
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+
+function renderPlaylist() {
+  const body = document.getElementById('pl-body');
+  document.getElementById('pl-count').textContent = `${tracks.length} tracks`;
+
+  if (!tracks.length) { body.innerHTML = '<div class="pl-empty"><p>No tracks found</p></div>'; return; }
+
+  const total = tracks.reduce((a,t) => a + t.duration_ms, 0);
+  document.getElementById('pl-info').textContent = `${tracks.length} tracks · ${fmt(total)}`;
+
+  body.innerHTML = tracks.map((t, i) => `
+    <div class="pl-item${i===idx?' cur':''}" id="pli-${i}" onclick="selectTrack(${i})">
+      <div class="pl-num">${i+1}.</div>
+      <div class="pl-name">${esc(t.artists[0].name)} — ${esc(t.name)}</div>
+      <div class="pl-dur">${fmt(t.duration_ms)}</div>
+    </div>
+  `).join('');
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function highlightPlaylist() {
+  document.querySelectorAll('.pl-item').forEach((el, i) => el.classList.toggle('cur', i === idx));
+  const el = document.getElementById(`pli-${idx}`);
+  if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function selectTrack(i) { idx = i; loadTrack(i, true); }
+
+// ─────────────────────────────────────────
+// LOAD + DISPLAY TRACK
+// ─────────────────────────────────────────
+function loadTrack(i, autoPlay) {
+  if (!tracks[i]) return;
+  const t = tracks[i];
+
+  // WinAmp display
+  document.getElementById('wa-track').textContent = `${t.artists[0].name} — ${t.name}`;
+  document.getElementById('wa-status').textContent = autoPlay ? '▶ PLAY' : '■ STOP';
+
+  // Album art
+  const art = document.getElementById('aa-art');
+  const imgs = t.album.images;
+  art.style.opacity = '0';
+  art.onload = () => { art.style.opacity = '1'; };
+  art.src = imgs && imgs[0] ? imgs[0].url : '';
+  document.getElementById('aa-title').textContent = t.name;
+  document.getElementById('aa-artist').textContent = t.artists[0].name;
+  document.getElementById('aa-album').textContent = t.album.name;
+  document.getElementById('aa-win-title').textContent = `Now Playing — ${t.name}`;
+
+  // Playlist highlight
+  highlightPlaylist();
+
+  // Spotify iFrame
+  if (spCtrl) {
+    spCtrl.loadUri(`spotify:track:${t.id}`);
+    if (autoPlay) { spCtrl.play(); setPlayState(true); }
+    else { setPlayState(false); }
+  }
+}
+
+// ─────────────────────────────────────────
+// PLAYBACK CONTROLS
+// ─────────────────────────────────────────
+function togglePlay() {
+  if (!spCtrl) { openSetup(); return; }
+  if (playing) { spCtrl.pause(); setPlayState(false); }
+  else         { spCtrl.play();  setPlayState(true);  }
+}
+
+function stopTrack() {
+  if (spCtrl) { spCtrl.pause(); try { spCtrl.seek(0); } catch(e){} }
+  setPlayState(false);
+  pos = 0; dur = 1;
+  updateProgress();
+  document.getElementById('wa-time').textContent = '0:00';
+  document.getElementById('wa-status').textContent = '■ STOP';
+}
+
+function nextTrack() {
+  if (!tracks.length) return;
+  idx = shuffle ? Math.floor(Math.random() * tracks.length) : (idx + 1) % tracks.length;
+  loadTrack(idx, playing);
+}
+
+function prevTrack() {
+  if (!tracks.length) return;
+  if (pos > 3 && spCtrl) { spCtrl.seek(0); return; }
+  idx = (idx - 1 + tracks.length) % tracks.length;
+  loadTrack(idx, playing);
+}
+
+function setPlayState(p) {
+  playing = p;
+  const btn = document.getElementById('btn-play');
+  btn.querySelector('.bi').textContent = p ? '⏸' : '▶';
+  btn.querySelector('.bl').textContent = p ? 'PAUSE' : 'PLAY';
+  btn.classList.toggle('lit', p);
+  document.getElementById('wa-status').textContent = p ? '▶ PLAY' : '❙❙ PAUSE';
+  if (p) startSpectrum(); else stopSpectrum();
+}
+
+function toggleShuffle() {
+  shuffle = !shuffle;
+  document.getElementById('tog-shuf').classList.toggle('on', shuffle);
+}
+function toggleRepeat() {
+  repeat = !repeat;
+  document.getElementById('tog-rep').classList.toggle('on', repeat);
+}
+
+function seekClick(e) {
+  if (!spCtrl || dur <= 0) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  const ms = pct * dur * 1000;
+  spCtrl.seek(ms);
+}
+
+function volClick(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  volume = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  document.getElementById('vol-fill').style.width = (volume * 100) + '%';
+  if (spCtrl) spCtrl.setVolume(volume);
+}
+
+function updateProgress() {
+  const pct = dur > 0 ? (pos / dur * 100) : 0;
+  document.getElementById('wa-prog-fill').style.width  = pct + '%';
+  document.getElementById('wa-prog-handle').style.left = pct + '%';
+  document.getElementById('wa-time').textContent = fmtS(pos);
+}
+
+// ─────────────────────────────────────────
+// SPECTRUM ANALYZER
+// ─────────────────────────────────────────
+const canvas = document.getElementById('wa-spectrum');
+const cctx   = canvas.getContext('2d');
+let bars  = Array(36).fill(0);
+let peaks = Array(36).fill(0);
+let rafId = null;
+
+function resizeCanvas() {
+  canvas.width = canvas.clientWidth;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function drawSpectrum() {
+  const W = canvas.width, H = canvas.height;
+  const n = bars.length;
+  const bw = Math.floor((W - n + 1) / n);
+
+  // Update bars
+  bars = bars.map((v, i) => {
+    const wave = Math.sin(Date.now() / 200 + i * 0.7) * 0.35 + 0.35;
+    const rand = Math.random() * 0.3;
+    const target = playing ? (wave + rand) * 0.9 : 0.02;
+    const speed = playing ? 0.18 : 0.08;
+    return v + (target - v) * speed;
+  });
+  // Update peaks
+  peaks = peaks.map((p, i) => Math.max(bars[i], p * 0.96));
+
+  cctx.fillStyle = '#000';
+  cctx.fillRect(0, 0, W, H);
+
+  bars.forEach((v, i) => {
+    const h = Math.max(2, v * H);
+    const x = i * (bw + 1);
+    const grad = cctx.createLinearGradient(0, H - h, 0, H);
+    grad.addColorStop(0, '#00ff00');
+    grad.addColorStop(0.4, '#00cc00');
+    grad.addColorStop(1,   '#004400');
+    cctx.fillStyle = grad;
+    cctx.fillRect(x, H - h, bw, h);
+
+    // Peak dot
+    const ph = Math.max(2, peaks[i] * H);
+    cctx.fillStyle = '#00ff44';
+    cctx.fillRect(x, H - ph - 1, bw, 2);
+  });
+
+  rafId = requestAnimationFrame(drawSpectrum);
+}
+
+function startSpectrum() { if (!rafId) drawSpectrum(); }
+function stopSpectrum()  {
+  cancelAnimationFrame(rafId); rafId = null;
+  // Draw flat idle state
+  const W = canvas.width, H = canvas.height;
+  const n = bars.length, bw = Math.floor((W - n + 1) / n);
+  cctx.fillStyle = '#000';
+  cctx.fillRect(0, 0, W, H);
+  for (let i = 0; i < n; i++) {
+    cctx.fillStyle = '#001a00';
+    cctx.fillRect(i * (bw + 1), H - 3, bw, 3);
+  }
+}
+stopSpectrum();
+
+// ─────────────────────────────────────────
+// SPOTIFY iFrame API
+// ─────────────────────────────────────────
+window.onSpotifyIframeApiReady = (IFrameAPI) => {
+  const el = document.getElementById('sp-embed');
+  IFrameAPI.createController(el, { uri: '', width: 1, height: 1 }, (ctrl) => {
+    spCtrl = ctrl;
+    ctrl.setVolume(volume);
+
+    ctrl.addListener('playback_update', (e) => {
+      if (!e || !e.data) return;
+      pos = (e.data.position || 0) / 1000;
+      dur = (e.data.duration || 1) / 1000;
+      updateProgress();
+
+      // Track ended
+      if (!e.data.isPaused && dur > 1 && pos >= dur - 0.5) {
+        if (repeat)   { spCtrl.seek(0); spCtrl.play(); }
+        else            nextTrack();
+      }
+
+      // Paused by Spotify UI
+      if (e.data.isPaused && playing) setPlayState(false);
+    });
+
+    // If playlist already loaded, set first track
+    if (tracks.length) loadTrack(idx, false);
+  });
+};
+
+// ─────────────────────────────────────────
+// KEYBOARD SHORTCUTS
+// ─────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  if (e.code === 'Space')      { e.preventDefault(); togglePlay(); }
+  if (e.code === 'ArrowRight') nextTrack();
+  if (e.code === 'ArrowLeft')  prevTrack();
+  if (e.code === 'KeyS')       toggleShuffle();
+  if (e.code === 'KeyR')       toggleRepeat();
+});
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+async function init() {
+  const sp = new URLSearchParams(window.location.search);
+  const hasCode = sp.get('code');
+
+  if (hasCode) {
+    // Hide birthday dialog during OAuth callback
+    hideWin('bday-dlg');
+    document.getElementById('overlay').style.display = 'none';
+    const ok = await handleCallback();
+    if (ok) await loadPlaylist();
+  } else {
+    // Try existing token
+    const savedTok = localStorage.getItem('sp_tok');
+    const exp      = Number(localStorage.getItem('sp_tok_exp'));
+    if (savedTok && Date.now() < exp) {
+      token = savedTok;
+      // Still show birthday dialog if first ever visit
+      if (!sessionStorage.getItem('bday_seen')) {
+        // show birthday dialog
+      } else {
+        hideWin('bday-dlg');
+        document.getElementById('overlay').style.display = 'none';
+      }
+      await loadPlaylist();
+    }
+    // else: birthday dialog is shown by default (from HTML)
+  }
+  sessionStorage.setItem('bday_seen', '1');
+}
+
+init();
+</script>
+</body>
+</html>
