@@ -916,29 +916,6 @@ input.eq-sl::-webkit-slider-thumb{
 #lm-question-box,#lm-now-box,#lm-scoreboard-box{border:2px solid;border-color:#111 #666 #666 #111;background:#000;color:#1ADE00}
 #lm-question-box{padding:8px 10px;margin:0 0 4px}
 #lm-question-title{font-family:'VT323',monospace;font-size:26px;letter-spacing:1px;color:#1ADE00;text-shadow:0 0 7px #00CC00}
-#lm-question-title-row{display:flex;align-items:center;justify-content:space-between}
-#lm-pause-vol-group{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-#lm-pause-btn{
-  font-family:'Courier New',monospace;font-size:18px;font-weight:bold;
-  color:#1ADE00;text-shadow:0 0 6px #00CC00;
-  background:#0a0a0a;border:2px solid;border-color:#1ADE00 #004400 #004400 #1ADE00;
-  padding:4px 14px;cursor:pointer;height:36px;min-width:52px;
-  display:flex;align-items:center;justify-content:center;
-}
-#lm-pause-btn:active{border-color:#004400 #1ADE00 #1ADE00 #004400}
-#lm-vol-inline-row{display:flex;align-items:center;gap:5px;width:100px}
-#lm-vol-lbl{font-family:'Courier New',monospace;font-size:9px;font-weight:bold;color:#888;letter-spacing:.04em;flex-shrink:0}
-#lm-vol-inline-row input[type=range]{
-  width:68px;flex:none;height:7px;-webkit-appearance:none;appearance:none;
-  background:linear-gradient(180deg,#0a0a0a,#232323);
-  border:1px solid;border-color:#181818 #5a5a5a #5a5a5a #181818;
-  cursor:pointer;outline:none;
-}
-#lm-vol-inline-row input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:12px;height:16px;
-  background:linear-gradient(180deg,#f2f2f2,#a7a7a7);
-  border:1px solid #2f2f2f;cursor:pointer;
-}
 #lm-question-sub{font-family:'Courier New',monospace;font-size:11px;color:#00BB00;margin-top:2px}
 #lm-meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .lm-mini{font-family:'Courier New',monospace;font-size:10px;color:#9fe49f}
@@ -1180,11 +1157,16 @@ input.eq-sl::-webkit-slider-thumb{
     <div id="wa-prog-thumb"></div>
   </div>
 
+  <div id="wa-vol-row">
+    <span class="wa-slider-lbl">VOL</span>
+    <input type="range" class="wa-range" id="lm-vol-slider" min="0" max="100" value="100">
+  </div>
 
   <div id="wa-controls">
     <div class="wa-btn transport" id="lm-start-btn" onclick="lmStartGame()" title="Start game">▶</div>
         <div class="wa-btn transport" id="lm-skip-btn" onclick="lmSkip()" title="Skip track">▶▶</div>
     <div class="wa-spacer"></div>
+    <div class="wa-btn transport on" id="lm-pause-btn" onclick="lmTogglePause()" title="Pause / Play">❚❚</div>
     <div class="wa-btn toggle on" id="lm-clip-btn" title="30 sec clip">30s</div>
   </div>
 
@@ -1203,16 +1185,7 @@ input.eq-sl::-webkit-slider-thumb{
   </div>
 </div>
     <div id="lm-question-box">
-      <div id="lm-question-title-row">
-        <div id="lm-question-title">Luiza &amp; Me</div>
-        <div id="lm-pause-vol-group">
-          <button id="lm-pause-btn" onclick="lmTogglePause()" title="Pause / Play">❚❚</button>
-          <div id="lm-vol-inline-row">
-            <span id="lm-vol-lbl">VOL</span>
-            <input type="range" id="lm-vol-slider" min="0" max="100" value="100">
-          </div>
-        </div>
-      </div>
+      <div id="lm-question-title">Luiza &amp; Me</div>
       <div id="lm-question-sub"></div>
       <div id="lm-meta-row">
         <span class="lm-mini">Score: <b id="lm-score-inline">0</b></span>
