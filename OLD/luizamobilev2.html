@@ -420,17 +420,14 @@ html,body{
     for(const q of queries){
       try{
         const url='https://itunes.apple.com/search?media=music&entity=song&limit=8&term='+encodeURIComponent(q);
-        dbg('fetch: '+q.slice(0,30));
-        const res=await fetch(url);
-        if(!res.ok){dbg('❌ http '+res.status);continue;}
+        const res=await fetch(url);if(!res.ok)continue;
         const data=await res.json();
         const items=Array.isArray(data.results)?data.results.filter(x=>x.previewUrl):[];
-        dbg('results:'+data.results.length+' withPreview:'+items.length);
         if(!items.length)continue;
         items.sort((a,b)=>scoreCandidate(track,b)-scoreCandidate(track,a));
         const best=items[0];
         if(best&&best.previewUrl){previewCache[track.uri]=best.previewUrl;persistCache();return best.previewUrl;}
-      }catch(err){dbg('❌ fetch error: '+err.message);continue;}
+      }catch(err){}
     }
     recentMisses.add(track.uri);persistMisses();return'';
   }
