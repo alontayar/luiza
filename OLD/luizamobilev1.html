@@ -311,7 +311,6 @@ html,body{
         <span class="lm-mini">High: <b id="lm-high-inline">0</b></span>
         <span class="lm-mini">Cache: <b id="lm-cache-count">0</b></span>
       </div>
-      <div id="lm-debug" style="font-family:'Courier New',monospace;font-size:9px;color:#ff6600;margin-top:4px;line-height:1.4"></div>
     </div>
 
     <div id="lm-options-grid">
@@ -359,10 +358,6 @@ html,body{
   let currentTrack=null,currentPreview='',currentOptions=[],lastIndices=[];
 
   const $=id=>document.getElementById(id);
-  const dbg=msg=>{const el=$('lm-debug');if(el)el.textContent=msg;console.log('[LM]',msg);};
-
-  // immediately report track count
-  dbg('TRACKS: '+TRACKS.length+(TRACKS.length?(' | first: '+TRACKS[0].name):'❌ EMPTY'));
   const highScore=()=>Number(localStorage.getItem(highKey)||'0');
   const scores=()=>{try{return JSON.parse(localStorage.getItem(scoreKey)||'[]')}catch(e){return[]}};
   const persistCache=()=>localStorage.setItem(cacheKey,JSON.stringify(previewCache));
@@ -474,17 +469,15 @@ html,body{
 
   async function nextRound(){
     disableOptions();setStatus('⌛ LOAD');setNow('');
-    dbg('nextRound | TRACKS:'+TRACKS.length+' cache:'+Object.keys(previewCache).length);
     const picked=await pickTrackWithPreview();
-    if(!picked){gameActive=false;setStatus('■ NOCLIP');dbg('❌ no clip found');lmShowResults('לא מצאתי כרגע קליפים זמינים.');return;}
-    dbg('✓ track:'+picked.track.name+' | url:'+picked.preview.slice(0,40));
+    if(!picked){gameActive=false;setStatus('■ NOCLIP');lmShowResults('לא מצאתי כרגע קליפים זמינים.');return;}
     currentTrack=picked.track;currentPreview=picked.preview;
     currentOptions=buildOptions(currentTrack);round+=1;
     localStorage.setItem(currentKey,JSON.stringify({uri:currentTrack.uri,ts:Date.now()}));
     renderOptions();updateScoreUI();
     audio.src=currentPreview;audio.currentTime=0;audio.loop=true;
     setStatus('▶ PLAY');setHint('');
-    try{await audio.play();dbg('▶ playing: '+currentTrack.name);}catch(err){setStatus('▶ READY');dbg('❌ play error: '+err.message);lmShowResults('הקליפ נטען, אבל צריך להתחיל מחדש.');}
+    try{await audio.play();}catch(err){setStatus('▶ READY');lmShowResults('הקליפ נטען, אבל צריך להתחיל מחדש.');}
     startVis();
   }
   async function startGame(){
