@@ -1092,7 +1092,6 @@ input.eq-sl::-webkit-slider-thumb{
 }
 #lm-hint-box{display:none !important;}
 #lm-question-sub{display:none !important;}
-#lm-now-text{display:none !important;}
 
 </style>
 </head>
@@ -1157,15 +1156,10 @@ input.eq-sl::-webkit-slider-thumb{
     <div id="wa-prog-thumb"></div>
   </div>
 
-  <div id="wa-vol-row">
-    <span class="wa-slider-lbl">VOL</span>
-  </div>
-
   <div id="wa-controls">
     <div class="wa-btn transport" id="lm-start-btn" onclick="lmStartGame()" title="Start game">▶</div>
         <div class="wa-btn transport" id="lm-skip-btn" onclick="lmSkip()" title="Skip track">▶▶</div>
     <div class="wa-spacer"></div>
-    <div class="wa-btn transport on" id="lm-pause-btn" onclick="lmTogglePause()" title="Pause / Play">❚❚</div>
     <div class="wa-btn toggle on" id="lm-clip-btn" title="30 sec clip">30s</div>
   </div>
 
@@ -2185,7 +2179,7 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
   }
   function renderScores(){
     const tbody = $('lm-score-tbody');
-    const rows = scores().sort((a,b)=> b.score - a.score || b.ts - a.ts).slice(0,6);
+    const rows = scores().sort((a,b)=> b.score - a.score || b.ts - a.ts).slice(0,10);
     tbody.innerHTML = rows.map((r,i)=> `<tr><td>${i+1}</td><td>${r.score}</td><td>${fmtDate(r.ts)}</td></tr>`).join('') || '<tr><td>1</td><td>0</td><td>—</td></tr>';
   }
   function saveRun(){
@@ -2197,7 +2191,7 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
     renderScores();
     updateScoreUI();
     if(isNewRecord) lmShowRecordRain();
-    setTimeout(()=>{ lmShowResults(isNewRecord ? ('שיא חדש! קיבלת ' + score + ' נקודות.') : ('המשחק נגמר. קיבלת ' + score + ' נקודות.')); }, 2000);
+    lmShowResults(isNewRecord ? ('שיא חדש! קיבלת ' + score + ' נקודות.') : ('המשחק נגמר. קיבלת ' + score + ' נקודות.'));
   }
   function pickIndex(){
     if(!TRACKS.length) return -1;
@@ -2321,7 +2315,6 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
     updateScoreUI();
     audio.src = currentPreview;
     audio.currentTime = 0;
-    audio.loop = true;
     setStatus('▶ PLAY');
     setHint('');
     setNow('Round ' + round + ': clip loaded. Listen and guess.');
@@ -2404,7 +2397,7 @@ window.lmChoose = async function(idx){
     }else{
       $('lm-opt-'+idx).classList.add('wrong');
       setStatus('✕ MISS');
-      setHint('');
+      setHint(''); lmShowResults('Luiza & Me');
       setNow('התשובה הנכונה: ' + optionLabel(currentTrack));
       gameActive = false; streak = 0;
       audio.pause(); stopVis(); saveRun();
@@ -2413,16 +2406,9 @@ window.lmChoose = async function(idx){
 
   audio.addEventListener('timeupdate', updateProgress);
   audio.addEventListener('ended', ()=>{ setStatus(gameActive ? '■ PICK' : '■ DONE'); stopVis(); updateProgress(); });
-  audio.addEventListener('play', ()=>{ setStatus('▶ PLAY'); startVis(); $('lm-pause-btn').textContent = '❚❚'; });
-  audio.addEventListener('pause', ()=>{ if(gameActive) setStatus('❚❚ WAIT'); $('lm-pause-btn').textContent = '▶'; });
+  audio.addEventListener('play', ()=>{ setStatus('▶ PLAY'); startVis(); });
+  audio.addEventListener('pause', ()=>{ if(gameActive) setStatus('❚❚ WAIT'); });
   audio.addEventListener('error', ()=>{ setStatus('ERR'); setNow('The current preview failed to play. Try Skip.'); stopVis(); });
-
-  $('lm-vol-slider').addEventListener('input', function(){ audio.volume = this.value / 100; });
-
-  window.lmTogglePause = function(){
-    if(!gameActive) return;
-    if(audio.paused){ audio.play(); } else { audio.pause(); }
-  };
 
   drawSpectrum(false); updateProgress(); renderScores(); updateScoreUI();
   setHint('');
