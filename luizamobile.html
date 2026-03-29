@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Luiza &amp; Me 🎮</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --si:#c0c0c0;--dk:#808080;--wh:#fff;--bl:#000;
+  --nb:#000080;--nb2:#1084d0;
+  --wa-body:#232323;
+  --wa-led-on:#1ADE00;
+  --wa-led-txt:#00BB00;
+}
+html,body{
+  width:100%;height:100%;height:100dvh;
+  overflow:hidden;
+  background:var(--si);
+  font-family:'Tahoma','MS Sans Serif',Arial,sans-serif;
+  font-size:12px;color:#000;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  display:flex;flex-direction:column;
+  padding:0;margin:0;
+}
+
+/* ══ Win95 window — fills entire screen ══ */
+#mob-window{
+  width:100%;flex:1;
+  min-height:0;
+  background:var(--si);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+
+/* Title bar */
+#mob-titlebar{
+  background:linear-gradient(to right,var(--nb),var(--nb2));
+  color:#fff;padding:4px 6px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-weight:bold;font-size:12px;cursor:default;
+}
+#mob-titlebar-left{display:flex;align-items:center;gap:5px}
+#mob-close-btn{
+  width:18px;height:16px;background:var(--si);
+  border:1px solid;border-color:var(--wh) var(--dk) var(--dk) var(--wh);
+  font-size:9px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:#000;font-weight:bold;flex-shrink:0;
+}
+#mob-close-btn:active{border-color:var(--dk) var(--wh) var(--wh) var(--dk)}
+
+/* Menubar */
+#mob-menubar{
+  background:#2D2D2D;padding:1px 4px;
+  display:flex;font-size:9px;color:#C8C8C8;
+  border-bottom:1px solid #111;
+}
+#mob-menubar span{cursor:pointer;padding:1px 5px}
+#mob-menubar span:active{background:var(--nb);color:#fff}
+
+/* ══ Winamp display ══ */
+#mob-display{
+  background:#000;padding:5px 8px 3px;
+  border-bottom:1px solid #333;
+}
+#mob-disp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+#mob-disp-left{display:flex;flex-direction:column;gap:1px}
+#lm-score-led{
+  font-family:'VT323',monospace;font-size:38px;color:#1ADE00;
+  text-shadow:0 0 8px #00CC00;line-height:1;
+}
+#wa-status-led{
+  font-family:'Courier New',monospace;font-size:10px;color:#00BB00;letter-spacing:.5px;
+}
+#mob-disp-badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;align-content:flex-start}
+.mob-badge{
+  font-family:'Courier New',monospace;font-size:9px;
+  background:#000;color:#1ADE00;border:1px solid #004400;
+  padding:1px 5px;text-shadow:0 0 4px #009900;white-space:nowrap;
+}
+
+/* Ticker */
+#mob-ticker{background:#000;overflow:hidden;height:16px;border-bottom:1px solid #111}
+#mob-ticker-inner{
+  font-family:'Courier New',monospace;font-size:10px;color:#1ADE00;
+  white-space:nowrap;padding:2px 0;
+  animation:ticker-scroll 14s linear infinite;
+  text-shadow:0 0 4px #00CC00;display:inline-block;
+}
+@keyframes ticker-scroll{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+
+/* Spectrum */
+#mob-spec-wrap{background:#000}
+#wa-spec{display:block;width:100%;height:36px;image-rendering:pixelated}
+
+/* Progress bar */
+#wa-prog-bar{
+  height:9px;background:#000;
+  border-top:1px solid #111;border-bottom:1px solid #111;position:relative;
+}
+#wa-prog-fill{height:100%;width:0%;background:#1ADE00;pointer-events:none}
+#wa-prog-thumb{
+  position:absolute;top:-3px;width:5px;height:15px;
+  background:linear-gradient(180deg,#F0C800,#C89600);
+  border:1px solid #806400;left:0%;transform:translateX(-50%);pointer-events:none;
+}
+
+/* Controls strip */
+#mob-controls-strip{
+  background:var(--wa-body);padding:4px;
+  display:flex;align-items:center;gap:4px;
+  border-bottom:1px solid #111;
+}
+.wa-btn{
+  background:#454545;border:1px solid;border-color:#888 #1A1A1A #1A1A1A #888;
+  cursor:pointer;font-family:'Courier New',monospace;font-size:11px;font-weight:bold;
+  color:#CCC;height:24px;padding:0 7px;
+  display:flex;align-items:center;justify-content:center;
+  white-space:nowrap;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.wa-btn:active{background:#363636;border-color:#1A1A1A #888 #888 #1A1A1A}
+.wa-spacer{flex:1}
+
+/* ══ Game content — grows to fill remaining space ══ */
+#mob-game-content{
+  background:var(--wa-body);
+  padding:4px;
+  flex:1;min-height:0;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+
+/* Question box */
+#lm-question-box{
+  border:2px solid;border-color:#111 #666 #666 #111;
+  background:#000;color:#1ADE00;
+  padding:7px 8px;margin-bottom:4px;
+}
+#lm-question-title-row{display:flex;align-items:center;justify-content:space-between}
+#lm-question-title{
+  font-family:'VT323',monospace;font-size:26px;letter-spacing:1px;
+  color:#1ADE00;text-shadow:0 0 7px #00CC00;
+}
+#lm-pause-vol-group{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+#lm-pause-btn{
+  font-family:'Courier New',monospace;font-size:16px;font-weight:bold;
+  color:#1ADE00;text-shadow:0 0 5px #00CC00;
+  background:#0a0a0a;border:2px solid;border-color:#1ADE00 #004400 #004400 #1ADE00;
+  padding:3px 12px;cursor:pointer;height:32px;min-width:48px;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+#lm-pause-btn:active{border-color:#004400 #1ADE00 #1ADE00 #004400}
+#lm-vol-inline-row{display:flex;align-items:center;gap:4px;width:90px}
+#lm-vol-lbl{
+  font-family:'Courier New',monospace;font-size:8px;font-weight:bold;
+  color:#888;letter-spacing:.04em;flex-shrink:0;
+}
+#lm-vol-inline-row input[type=range]{
+  width:62px;flex:none;height:7px;
+  -webkit-appearance:none;appearance:none;
+  background:linear-gradient(180deg,#0a0a0a,#232323);
+  border:1px solid;border-color:#181818 #5a5a5a #5a5a5a #181818;
+  cursor:pointer;outline:none;
+}
+#lm-vol-inline-row input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:20px;
+  background:linear-gradient(180deg,#f2f2f2,#a7a7a7);
+  border:1px solid #2f2f2f;cursor:pointer;
+}
+#lm-meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.lm-mini{font-family:'Courier New',monospace;font-size:10px;color:#9fe49f}
+
+/* Options */
+#lm-options-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:4px;
+  flex:1;min-height:0;
+}
+.lm-option{
+  height:100%;
+  background:#050505;
+  border:2px solid;border-color:#666 #111 #111 #666;
+  color:#fff;padding:8px 8px;text-align:left;
+  font-family:'Courier New',monospace;font-size:11px;
+  cursor:pointer;line-height:1.35;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.lm-option:active{background:#0A0A5C;color:#FFFF00}
+.lm-option.correct{background:#0b3d12 !important;color:#d8ffd8 !important;border-color:#1ADE00 !important}
+.lm-option.wrong{background:#4f0a0a !important;color:#ffd8d8 !important;border-color:#cc3333 !important}
+.lm-option:disabled{opacity:1;cursor:default}
+
+/* hidden */
+#lm-hint-box,#lm-now-text{display:none}
+
+/* ══ Results overlay ══ */
+#lm-results-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;align-items:center;justify-content:center;
+  z-index:500;padding:12px;
+}
+#lm-results-overlay.show{display:flex}
+#lm-results-card{
+  width:100%;max-width:340px;
+  background:var(--si);
+  border:2px solid;border-color:var(--wh) var(--dk) var(--dk) var(--wh);
+  box-shadow:3px 3px 0 rgba(0,0,0,.5);
+}
+#lm-results-title{
+  background:linear-gradient(to right,var(--nb),var(--nb2));
+  color:#fff;font-weight:bold;font-size:12px;padding:3px 8px;
+}
+#lm-results-body{padding:10px}
+#lm-results-summary{font-size:12px;margin-bottom:8px;line-height:1.35}
+#lm-results-card table{width:100%;border-collapse:collapse;font-size:11px;background:#fff}
+#lm-results-card th,#lm-results-card td{border:1px solid #808080;padding:4px 6px;text-align:left}
+#lm-results-card th{background:#dcdcdc}
+#lm-results-actions{padding-top:8px;display:flex;justify-content:center}
+#lm-results-newgame-btn{
+  background:var(--si);border:2px solid;border-color:var(--wh) var(--dk) var(--dk) var(--wh);
+  color:#000;font-family:'Tahoma','MS Sans Serif',sans-serif;font-size:11px;
+  padding:5px 18px;cursor:pointer;min-width:100px;
+  -webkit-tap-highlight-color:transparent;
+}
+#lm-results-newgame-btn:active{border-color:var(--dk) var(--wh) var(--wh) var(--dk)}
+
+/* ══ Record rain ══ */
+#lm-record-rain{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:999999;display:none}
+#lm-record-banner{
+  position:fixed;top:16%;left:50%;transform:translateX(-50%);
+  font-family:'Tahoma',Arial,sans-serif;font-size:38px;font-weight:bold;
+  color:#fff36a;text-shadow:2px 2px 0 #000,0 0 18px rgba(255,243,106,.65);
+  z-index:1000000;display:none;pointer-events:none;text-align:center;width:90vw;
+}
+.lm-rain-item{
+  position:absolute;top:-10vh;font-size:28px;
+  animation-name:lm-rain-fall;animation-timing-function:linear;animation-iteration-count:1;
+  user-select:none;will-change:transform;
+}
+@keyframes lm-rain-fall{
+  0%{transform:translateY(-15vh) rotate(0deg);opacity:1}
+  100%{transform:translateY(120vh) rotate(360deg);opacity:.98}
+}
+</style>
+</head>
+<body>
+
+<div id="lm-record-rain"></div>
+<div id="lm-record-banner">שיא חדש! 🐰</div>
+
+<div id="mob-window">
+
+  <div id="mob-titlebar">
+    <div id="mob-titlebar-left"><span>🎮</span><span>Luiza &amp; Me</span></div>
+    <div id="mob-close-btn">✕</div>
+  </div>
+
+  <div id="mob-menubar">
+    <span>Game</span><span>Round</span><span>Scores</span><span>Help</span>
+  </div>
+
+  <div id="mob-display">
+    <div id="mob-disp-top">
+      <div id="mob-disp-left">
+        <span id="lm-score-led">0</span>
+        <div id="wa-status-led">■ READY</div>
+      </div>
+      <div id="mob-disp-badges">
+        <span class="mob-badge" id="lm-high">HI 0</span>
+        <span class="mob-badge" id="lm-streak">STREAK 0</span>
+        <span class="mob-badge" id="lm-round">ROUND 0</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="mob-ticker"><div id="mob-ticker-inner">[ LUIZA &amp; ME &nbsp;&nbsp;&nbsp; BLINDFOLD MODE &nbsp;&nbsp;&nbsp; ]</div></div>
+
+  <div id="mob-spec-wrap"><canvas id="wa-spec" height="36"></canvas></div>
+
+  <div id="wa-prog-bar">
+    <div id="wa-prog-fill"></div>
+    <div id="wa-prog-thumb"></div>
+  </div>
+
+  <div id="mob-controls-strip">
+    <div class="wa-btn" onclick="lmSkip()">▶▶</div>
+    <div class="wa-spacer"></div>
+  </div>
+
+  <div id="mob-game-content">
+
+    <div id="lm-question-box">
+      <div id="lm-question-title-row">
+        <div id="lm-question-title">Luiza &amp; Me</div>
+        <div id="lm-pause-vol-group">
+          <button id="lm-pause-btn" onclick="lmTogglePause()">❚❚</button>
+          <div id="lm-vol-inline-row">
+            <span id="lm-vol-lbl">VOL</span>
+            <input type="range" id="lm-vol-slider" min="0" max="100" value="100">
+          </div>
+        </div>
+      </div>
+      <div id="lm-meta-row">
+        <span class="lm-mini">Score: <b id="lm-score-inline">0</b></span>
+        <span class="lm-mini">High: <b id="lm-high-inline">0</b></span>
+        <span class="lm-mini">Cache: <b id="lm-cache-count">0</b></span>
+      </div>
+    </div>
+
+    <div id="lm-options-grid">
+      <button class="lm-option" id="lm-opt-0" onclick="lmChoose(0)">—</button>
+      <button class="lm-option" id="lm-opt-1" onclick="lmChoose(1)">—</button>
+      <button class="lm-option" id="lm-opt-2" onclick="lmChoose(2)">—</button>
+      <button class="lm-option" id="lm-opt-3" onclick="lmChoose(3)">—</button>
+    </div>
+
+  </div>
+</div>
+
+<div id="lm-hint-box"></div>
+<div id="lm-now-text"></div>
+<table style="display:none"><tbody id="lm-score-tbody"></tbody></table>
+
+<div id="lm-results-overlay" class="show">
+  <div id="lm-results-card">
+    <div id="lm-results-title">סטטיסטיקה</div>
+    <div id="lm-results-body">
+      <div id="lm-results-summary"></div>
+      <table>
+        <thead><tr><th>#</th><th>Score</th><th>Date</th></tr></thead>
+        <tbody id="lm-results-tbody"></tbody>
+      </table>
+      <div id="lm-results-actions">
+        <button id="lm-results-newgame-btn" onclick="lmStartGame()">משחק חדש</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<audio id="lm-audio" preload="none" crossorigin="anonymous"></audio>
+
+<script src="tracks-data.js"></script>
+<script>
+(function(){
+  const TRACKS = Array.isArray(window.LOCAL_TRACKS) ? window.LOCAL_TRACKS : [];
+  const audio = document.getElementById('lm-audio');
+  const cacheKey='luiza_preview_cache_v1', missKey='luiza_preview_miss_v1';
+  const scoreKey='luiza_me_scores_v1', highKey='luiza_me_high_v1', currentKey='luiza_me_current_v1';
+  const recentMisses = new Set(JSON.parse(localStorage.getItem(missKey)||'[]'));
+  let previewCache=(()=>{try{return JSON.parse(localStorage.getItem(cacheKey)||'{}')}catch(e){return{}}})();
+  let score=0,streak=0,round=0,gameActive=false;
+  let currentTrack=null,currentPreview='',currentOptions=[],lastIndices=[];
+
+  const $=id=>document.getElementById(id);
+  const highScore=()=>Number(localStorage.getItem(highKey)||'0');
+  const scores=()=>{try{return JSON.parse(localStorage.getItem(scoreKey)||'[]')}catch(e){return[]}};
+  const persistCache=()=>localStorage.setItem(cacheKey,JSON.stringify(previewCache));
+  const persistMisses=()=>localStorage.setItem(missKey,JSON.stringify(Array.from(recentMisses).slice(-2000)));
+
+  function setStatus(t){const el=$('wa-status-led');if(el)el.textContent=t;}
+  function setHint(t){const el=$('lm-hint-box');if(el)el.textContent=t;}
+  function setNow(t){const el=$('lm-now-text');if(el)el.textContent=t;}
+  function norm(s){return String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/feat\.?|ft\.?/g,'').replace(/[^a-z0-9]+/g,' ').trim();}
+  function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function fmtDate(ts){const d=new Date(ts);return d.toLocaleDateString('he-IL',{month:'2-digit',day:'2-digit'})+' '+d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});}
+
+  function updateScoreUI(){
+    $('lm-score-led').textContent=String(score);
+    $('lm-score-inline').textContent=String(score);
+    $('lm-high').textContent='HI '+highScore();
+    $('lm-high-inline').textContent=String(highScore());
+    $('lm-streak').textContent='STREAK '+streak;
+    $('lm-round').textContent='ROUND '+round;
+    $('lm-cache-count').textContent=String(Object.keys(previewCache).length);
+  }
+  function renderScores(){
+    const tbody=$('lm-score-tbody');
+    const rows=scores().sort((a,b)=>b.score-a.score||b.ts-a.ts).slice(0,6);
+    tbody.innerHTML=rows.map((r,i)=>`<tr><td>${i+1}</td><td>${r.score}</td><td>${fmtDate(r.ts)}</td></tr>`).join('')||'<tr><td>1</td><td>0</td><td>—</td></tr>';
+  }
+  function saveRun(){
+    const prev=scores();prev.push({score,ts:Date.now()});
+    localStorage.setItem(scoreKey,JSON.stringify(prev.slice(-50)));
+    const isNewRecord=score>highScore();
+    if(isNewRecord)localStorage.setItem(highKey,String(score));
+    renderScores();updateScoreUI();
+    if(isNewRecord)lmShowRecordRain();
+    setTimeout(()=>{lmShowResults(isNewRecord?('שיא חדש! קיבלת '+score+' נקודות.'):('המשחק נגמר. קיבלת '+score+' נקודות.'));},2000);
+  }
+  function pickIndex(){
+    if(!TRACKS.length)return -1;
+    for(let t=0;t<80;t++){const i=Math.floor(Math.random()*TRACKS.length);if(!lastIndices.includes(i))return i;}
+    return Math.floor(Math.random()*TRACKS.length);
+  }
+  function optionLabel(t){return`${t.name} — ${String(t.artist||'').replace(/\,/g,',')}` ;}
+  function scoreCandidate(track,item){
+    const tn=norm(track.name),ta=norm(String(track.artist||'').split(',')[0]);
+    const rn=norm(item.trackName||item.collectionName||''),ra=norm(item.artistName||'');
+    let s=0;
+    if(rn===tn)s+=120;if(rn.includes(tn)||tn.includes(rn))s+=45;
+    if(ra.includes(ta)||ta.includes(ra))s+=35;if(item.previewUrl)s+=20;
+    return s;
+  }
+  async function resolvePreview(track){
+    if(previewCache[track.uri])return previewCache[track.uri];
+    if(recentMisses.has(track.uri))return'';
+    const artist=String(track.artist||'').split(',')[0].trim();
+    const queries=[`${track.name} ${artist}`,`${track.name}`,`${artist} ${track.name}`];
+    for(const q of queries){
+      try{
+        const url='https://itunes.apple.com/search?media=music&entity=song&limit=8&term='+encodeURIComponent(q);
+        const res=await fetch(url);if(!res.ok)continue;
+        const data=await res.json();
+        const items=Array.isArray(data.results)?data.results.filter(x=>x.previewUrl):[];
+        if(!items.length)continue;
+        items.sort((a,b)=>scoreCandidate(track,b)-scoreCandidate(track,a));
+        const best=items[0];
+        if(best&&best.previewUrl){previewCache[track.uri]=best.previewUrl;persistCache();return best.previewUrl;}
+      }catch(err){}
+    }
+    recentMisses.add(track.uri);persistMisses();return'';
+  }
+  function renderOptions(){currentOptions.forEach((track,idx)=>{const btn=$('lm-opt-'+idx);btn.disabled=false;btn.className='lm-option';btn.textContent=optionLabel(track);});}
+  function disableOptions(){for(let i=0;i<4;i++)$('lm-opt-'+i).disabled=true;}
+  async function pickTrackWithPreview(){
+    for(let t=0;t<60;t++){
+      const idx=pickIndex();if(idx<0)break;
+      const track=TRACKS[idx];const preview=await resolvePreview(track);
+      if(preview){lastIndices.push(idx);lastIndices=lastIndices.slice(-12);return{track,preview,idx};}
+    }
+    return null;
+  }
+  function buildOptions(correctTrack){
+    const opts=[correctTrack];const used=new Set([correctTrack.uri]);
+    while(opts.length<4&&used.size<TRACKS.length){
+      const t=TRACKS[Math.floor(Math.random()*TRACKS.length)];
+      if(!t||used.has(t.uri))continue;used.add(t.uri);opts.push(t);
+    }
+    return shuffle(opts);
+  }
+
+  function drawSpectrum(active=false){
+    const c=$('wa-spec');
+    const w=c.offsetWidth||320;if(c.width!==w)c.width=w;
+    const ctx=c.getContext('2d');const cw=c.width,ch=c.height;
+    ctx.fillStyle='#000';ctx.fillRect(0,0,cw,ch);
+    const bars=Math.floor(cw/8),bw=Math.floor(cw/bars);
+    for(let i=0;i<bars;i++){
+      const seed=active?(Math.sin((Date.now()/160)+(i*0.7))*0.5+0.5):(0.08+((i%5)/50));
+      const bh=Math.max(2,Math.floor(seed*ch*0.95)),y=ch-bh;
+      ctx.fillStyle=bh>ch*0.7?'#D6D63A':bh>ch*0.45?'#1ADE00':'#0A5200';
+      ctx.fillRect(i*bw+1,y,Math.max(2,bw-2),bh);
+    }
+  }
+  let visTimer=null;
+  function startVis(){stopVis();visTimer=setInterval(()=>drawSpectrum(!audio.paused),90);}
+  function stopVis(){if(visTimer)clearInterval(visTimer);visTimer=null;drawSpectrum(false);}
+  function updateProgress(){
+    const dur=audio.duration||30,cur=audio.currentTime||0;
+    const p=Math.max(0,Math.min(100,(cur/dur)*100));
+    $('wa-prog-fill').style.width=p+'%';$('wa-prog-thumb').style.left=p+'%';
+  }
+
+  async function nextRound(){
+    disableOptions();setStatus('⌛ LOAD');setNow('');
+    const picked=await pickTrackWithPreview();
+    if(!picked){gameActive=false;setStatus('■ NOCLIP');lmShowResults('לא מצאתי כרגע קליפים זמינים.');return;}
+    currentTrack=picked.track;currentPreview=picked.preview;
+    currentOptions=buildOptions(currentTrack);round+=1;
+    localStorage.setItem(currentKey,JSON.stringify({uri:currentTrack.uri,ts:Date.now()}));
+    renderOptions();updateScoreUI();
+    audio.src=currentPreview;audio.currentTime=0;audio.loop=true;
+    setStatus('▶ PLAY');setHint('');
+    try{await audio.play();}catch(err){setStatus('▶ READY');lmShowResults('הקליפ נטען, אבל צריך להתחיל מחדש.');}
+    startVis();
+  }
+  async function startGame(){
+    score=0;streak=0;round=0;gameActive=true;
+    lmHideResults();updateScoreUI();setHint('');await nextRound();
+  }
+  window.lmStartGame=startGame;
+
+  function lmShowResults(summary=''){
+    const ov=$('lm-results-overlay'),sum=$('lm-results-summary');
+    const src=$('lm-score-tbody'),dst=$('lm-results-tbody');
+    if(sum)sum.textContent=summary||'';
+    if(src&&dst)dst.innerHTML=src.innerHTML;
+    if(ov)ov.classList.add('show');
+  }
+  function lmHideResults(){const ov=$('lm-results-overlay');if(ov)ov.classList.remove('show');}
+  function lmShowRecordRain(){
+    const wrap=$('lm-record-rain'),banner=$('lm-record-banner');
+    if(!wrap||!banner)return;
+    wrap.innerHTML='';wrap.style.display='block';banner.style.display='block';
+    const icons=['🐰','🥕'];
+    for(let i=0;i<100;i++){
+      const el=document.createElement('div');el.className='lm-rain-item';
+      el.textContent=icons[Math.floor(Math.random()*icons.length)];
+      el.style.left=(Math.random()*100)+'vw';
+      el.style.fontSize=(18+Math.random()*24)+'px';
+      el.style.animationDuration=(2.3+Math.random()*2.7)+'s';
+      el.style.animationDelay=(Math.random()*0.8)+'s';
+      wrap.appendChild(el);
+    }
+    setTimeout(()=>{wrap.style.display='none';banner.style.display='none';wrap.innerHTML='';},4300);
+  }
+
+  window.lmSkip=async function(){if(!gameActive)return startGame();streak=0;updateScoreUI();await nextRound();};
+  window.lmChoose=async function(idx){
+    if(!gameActive||!currentTrack)return;
+    const chosen=currentOptions[idx];disableOptions();
+    for(let i=0;i<4;i++){const btn=$('lm-opt-'+i);if(currentOptions[i].uri===currentTrack.uri)btn.classList.add('correct');}
+    if(chosen&&chosen.uri===currentTrack.uri){
+      score+=1;streak+=1;updateScoreUI();setStatus('✓ NICE');
+      setTimeout(()=>{if(gameActive)nextRound();},1100);
+    }else{
+      $('lm-opt-'+idx).classList.add('wrong');setStatus('✕ MISS');
+      gameActive=false;streak=0;audio.pause();stopVis();saveRun();
+    }
+  };
+
+  audio.addEventListener('timeupdate',updateProgress);
+  audio.addEventListener('ended',()=>{setStatus(gameActive?'■ PICK':'■ DONE');stopVis();updateProgress();});
+  audio.addEventListener('play',()=>{setStatus('▶ PLAY');startVis();$('lm-pause-btn').textContent='❚❚';});
+  audio.addEventListener('pause',()=>{if(gameActive)setStatus('❚❚ WAIT');$('lm-pause-btn').textContent='▶';});
+  audio.addEventListener('error',()=>{setStatus('ERR');stopVis();});
+
+  $('lm-vol-slider').addEventListener('input',function(){audio.volume=this.value/100;});
+  window.lmTogglePause=function(){if(!gameActive)return;if(audio.paused){audio.play();}else{audio.pause();}};
+
+  drawSpectrum(false);updateProgress();renderScores();updateScoreUI();
+})();
+</script>
+</body>
+</html>
