@@ -914,47 +914,33 @@ input.eq-sl::-webkit-slider-thumb{
 #spwin{width:420px;top:50px;left:80px;z-index:100;background:var(--wa-body)}
 #lm-game-wrap{padding:4px 2px 2px;background:var(--wa-body)}
 #lm-question-box,#lm-now-box,#lm-scoreboard-box{border:2px solid;border-color:#111 #666 #666 #111;background:#000;color:#1ADE00}
-#lm-question-box{padding:6px 10px 6px;margin:0 0 4px}
+#lm-question-box{padding:8px 10px;margin:0 0 4px}
 #lm-question-title{font-family:'VT323',monospace;font-size:26px;letter-spacing:1px;color:#1ADE00;text-shadow:0 0 7px #00CC00}
 #lm-question-title-row{display:flex;align-items:center;justify-content:space-between}
 #lm-pause-vol-group{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
 #lm-pause-btn{
-  font-family:'Tahoma','MS Sans Serif',Arial,sans-serif;font-size:22px;font-weight:bold;
-  color:#000;text-shadow:none;
-  background:var(--si);border:2px solid;border-color:var(--wh) var(--dk) var(--dk) var(--wh);
-  padding:2px 12px;cursor:pointer;height:28px;min-width:52px;
-  display:flex;align-items:center;justify-content:center;line-height:1;
+  font-family:'Courier New',monospace;font-size:18px;font-weight:bold;
+  color:#1ADE00;text-shadow:0 0 6px #00CC00;
+  background:#0a0a0a;border:2px solid;border-color:#1ADE00 #004400 #004400 #1ADE00;
+  padding:4px 14px;cursor:pointer;height:36px;min-width:52px;
+  display:flex;align-items:center;justify-content:center;
 }
-#lm-pause-btn:active{border-color:var(--dk) var(--wh) var(--wh) var(--dk);padding:3px 11px 1px 13px;}
-#lm-vol-inline-row{display:flex;align-items:center;gap:4px;margin-left:auto}
-#lm-vol-lbl{font-size:13px;color:#333;flex-shrink:0;line-height:1}
+#lm-pause-btn:active{border-color:#004400 #1ADE00 #1ADE00 #004400}
+#lm-vol-inline-row{display:flex;align-items:center;gap:5px;width:100px}
+#lm-vol-lbl{font-family:'Courier New',monospace;font-size:9px;font-weight:bold;color:#888;letter-spacing:.04em;flex-shrink:0}
 #lm-vol-inline-row input[type=range]{
-  width:72px;flex:none;height:16px;-webkit-appearance:none;appearance:none;
-  background:transparent;
-  cursor:pointer;outline:none;padding:0;
-}
-#lm-vol-inline-row input[type=range]::-webkit-slider-runnable-track{
-  height:4px;background:var(--si);
-  border:1px solid;border-color:var(--dk) var(--wh) var(--wh) var(--dk);
+  width:68px;flex:none;height:7px;-webkit-appearance:none;appearance:none;
+  background:linear-gradient(180deg,#0a0a0a,#232323);
+  border:1px solid;border-color:#181818 #5a5a5a #5a5a5a #181818;
+  cursor:pointer;outline:none;
 }
 #lm-vol-inline-row input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:11px;height:20px;margin-top:-9px;
-  background:var(--si);
-  border:2px solid;border-color:var(--wh) var(--dk) var(--dk) var(--wh);
-  cursor:pointer;
-}
-#lm-vol-inline-row input[type=range]::-moz-range-track{
-  height:4px;background:var(--si);
-  border:1px solid;border-color:var(--dk) var(--wh) var(--wh) var(--dk);
-}
-#lm-vol-inline-row input[type=range]::-moz-range-thumb{
-  width:11px;height:20px;border-radius:0;
-  background:var(--si);
-  border:2px solid;border-color:var(--wh) var(--dk) var(--dk) var(--wh);
-  cursor:pointer;
+  -webkit-appearance:none;width:12px;height:16px;
+  background:linear-gradient(180deg,#f2f2f2,#a7a7a7);
+  border:1px solid #2f2f2f;cursor:pointer;
 }
 #lm-question-sub{font-family:'Courier New',monospace;font-size:11px;color:#00BB00;margin-top:2px}
-#lm-meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;align-items:center}
+#lm-meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .lm-mini{font-family:'Courier New',monospace;font-size:10px;color:#9fe49f}
 #lm-hint-box{text-align:center !important;font-size:12px !important;line-height:1.25 !important;padding:5px 8px !important;min-height:auto !important;}
 #lm-options-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:4px}
@@ -996,37 +982,6 @@ input.eq-sl::-webkit-slider-thumb{
 
 #lm-scoreboard-box{
   display:none;
-}
-#lm-intro-overlay{
-  position:absolute;
-  inset:38px 14px 14px 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:46;
-  pointer-events:auto;
-}
-#lm-intro-card{
-  width:min(92%, 360px);
-  background:#c0c0c0;
-  border:2px solid;
-  border-color:#fff #808080 #808080 #fff;
-  box-shadow:2px 2px 0 rgba(0,0,0,.35);
-  pointer-events:auto;
-}
-#lm-intro-title{
-  background:linear-gradient(to right,#000080,#1084d0);
-  color:#fff;
-  font-weight:bold;
-  font-size:12px;
-  padding:4px 8px;
-}
-#lm-intro-body{
-  padding:12px 8px 10px;
-}
-#lm-intro-actions{
-  display:flex;
-  justify-content:center;
 }
 #lm-results-overlay{
   position:absolute;
@@ -1234,15 +1189,7 @@ input.eq-sl::-webkit-slider-thumb{
   </div>
 
   <div id="lm-game-wrap">
-<div id="lm-intro-overlay">
-  <div id="lm-intro-card">
-    <div id="lm-intro-title">לואיזה ואני</div>
-    <div id="lm-intro-body">
-      <div id="lm-intro-actions"><button class="wb" style="min-width:96px" onclick="document.getElementById('lm-intro-overlay').style.display='none';lmStartGame()">משחק חדש</button></div>
-    </div>
-  </div>
-</div>
-<div id="lm-results-overlay">
+<div id="lm-results-overlay" class="show">
   <div id="lm-results-card">
     <div id="lm-results-title">סטטיסטיקה</div>
     <div id="lm-results-body">
@@ -1258,17 +1205,19 @@ input.eq-sl::-webkit-slider-thumb{
     <div id="lm-question-box">
       <div id="lm-question-title-row">
         <div id="lm-question-title">Luiza &amp; Me</div>
-        <button id="lm-pause-btn" onclick="lmTogglePause()" title="Pause / Play">❚❚</button>
+        <div id="lm-pause-vol-group">
+          <button id="lm-pause-btn" onclick="lmTogglePause()" title="Pause / Play">❚❚</button>
+          <div id="lm-vol-inline-row">
+            <span id="lm-vol-lbl">VOL</span>
+            <input type="range" id="lm-vol-slider" min="0" max="100" value="100">
+          </div>
+        </div>
       </div>
       <div id="lm-question-sub"></div>
       <div id="lm-meta-row">
         <span class="lm-mini">Score: <b id="lm-score-inline">0</b></span>
         <span class="lm-mini">High score: <b id="lm-high-inline">0</b></span>
         <span class="lm-mini">Previews ready: <b id="lm-cache-count">0</b></span>
-        <div id="lm-vol-inline-row">
-          <span id="lm-vol-lbl">🔊</span>
-          <input type="range" id="lm-vol-slider" min="0" max="100" value="100">
-        </div>
       </div>
       <div id="lm-hint-box"></div>
     </div>
