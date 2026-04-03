@@ -2231,7 +2231,7 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
 (function(){
   const TRACKS = Array.isArray(window.LOCAL_TRACKS) ? window.LOCAL_TRACKS : [];
   const audio = document.getElementById('lm-audio');
-  const cacheKey = 'luiza_preview_cache_v2';
+  const cacheKey = 'luiza_preview_cache_v1';
   const missKey = 'luiza_preview_miss_v1';
   const scoreKey = 'luiza_me_scores_v1';
   const highKey = 'luiza_me_high_v1';
@@ -2321,7 +2321,7 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
         if(!items.length) continue;
         items.sort((a,b)=> scoreCandidate(track,b) - scoreCandidate(track,a));
         const best = items[0];
-        if(best && best.previewUrl && scoreCandidate(track, best) >= 50){
+        if(best && best.previewUrl){
           previewCache[track.uri] = best.previewUrl;
           persistCache();
           return best.previewUrl;
