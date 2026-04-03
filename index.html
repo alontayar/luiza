@@ -2231,8 +2231,8 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
 (function(){
   const TRACKS = Array.isArray(window.LOCAL_TRACKS) ? window.LOCAL_TRACKS : [];
   const audio = document.getElementById('lm-audio');
-  const cacheKey = 'luiza_preview_cache_v2';
-  const missKey = 'luiza_preview_miss_v1';
+  const cacheKey = 'luiza_preview_cache_v3';
+  const missKey = 'luiza_preview_miss_v2';
   const scoreKey = 'luiza_me_scores_v1';
   const highKey = 'luiza_me_high_v1';
   const currentKey = 'luiza_me_current_v1';
@@ -2292,28 +2292,35 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
     return Math.floor(Math.random() * TRACKS.length);
   }
   function optionLabel(t){ return `${t.name} — ${String(t.artist||'').replace(/\,/g,',')}`; }
+  function trackCacheKey(track){
+    // Avoid undefined/null URI collisions - fall back to name+artist as key
+    if(track.uri && typeof track.uri === 'string' && track.uri.length > 2) return track.uri;
+    return 'nk:' + norm(track.name) + '|' + norm(String(track.artist||'').split(',')[0]);
+  }
   function scoreCandidate(track, item){
     const tn = norm(track.name), ta = norm(String(track.artist||'').split(',')[0]);
     const rn = norm(item.trackName||item.collectionName||''), ra = norm(item.artistName||'');
-    let s = 0;
-    if(rn === tn) s += 120;
-    if(rn.includes(tn) || tn.includes(rn)) s += 45;
-    if(ra.includes(ta) || ta.includes(ra)) s += 35;
-    if(item.previewUrl) s += 20;
-    return s;
+    let nameScore = 0, artistScore = 0;
+    if(rn === tn) nameScore = 120;
+    else if(rn.includes(tn) || tn.includes(rn)) nameScore = 45;
+    if(ra === ta) artistScore = 60;
+    else if(ra.includes(ta) || ta.includes(ra)) artistScore = 35;
+    // Must match BOTH name AND artist - no single-field match accepted
+    if(nameScore === 0 || artistScore === 0) return 0;
+    return nameScore + artistScore + (item.previewUrl ? 20 : 0);
   }
   async function resolvePreview(track){
-    if(previewCache[track.uri]) return previewCache[track.uri];
-    if(recentMisses.has(track.uri)) return '';
-    const artist = String(track.artist||'').replace(/\,/g, ',').split(',')[0].trim();
+    const ck = trackCacheKey(track);
+    if(previewCache[ck]) return previewCache[ck];
+    if(recentMisses.has(ck)) return '';
+    const artist = String(track.artist||'').split(',')[0].trim();
     const queries = [
       `${track.name} ${artist}`,
-      `${track.name}`,
       `${artist} ${track.name}`
     ];
     for(const q of queries){
       try{
-        const url = 'https://itunes.apple.com/search?media=music&entity=song&limit=8&term=' + encodeURIComponent(q);
+        const url = 'https://itunes.apple.com/search?media=music&entity=song&limit=12&term=' + encodeURIComponent(q);
         const res = await fetch(url);
         if(!res.ok) continue;
         const data = await res.json();
@@ -2321,14 +2328,14 @@ document.getElementById('clk').textContent=new Date().toLocaleTimeString('he-IL'
         if(!items.length) continue;
         items.sort((a,b)=> scoreCandidate(track,b) - scoreCandidate(track,a));
         const best = items[0];
-        if(best && best.previewUrl && scoreCandidate(track, best) >= 50){
-          previewCache[track.uri] = best.previewUrl;
+        if(best && best.previewUrl && scoreCandidate(track, best) > 0){
+          previewCache[ck] = best.previewUrl;
           persistCache();
           return best.previewUrl;
         }
       }catch(err){}
     }
-    recentMisses.add(track.uri); persistMisses();
+    recentMisses.add(ck); persistMisses();
     return '';
   }
   function renderOptions(){
